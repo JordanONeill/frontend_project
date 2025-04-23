@@ -1,13 +1,111 @@
+<!-- insights.page.html -->
 <ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title>insights</ion-title>
+  <ion-toolbar color="primary">
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="home"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Wellness Insights</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">insights</ion-title>
-    </ion-toolbar>
-  </ion-header>
+  <div class="insights-container">
+    <ion-segment [(ngModel)]="selectedSegment" (ionChange)="segmentChanged($event)">
+      <ion-segment-button value="summary">
+        <ion-label>Summary</ion-label>
+      </ion-segment-button>
+      <ion-segment-button value="trends">
+        <ion-label>Trends</ion-label>
+      </ion-segment-button>
+    </ion-segment>
+    
+    <div *ngIf="selectedSegment === 'summary'">
+      <ion-card>
+        <ion-card-header>
+          <ion-card-title>Weekly Summary</ion-card-title>
+        </ion-card-header>
+        <ion-card-content>
+          <div class="summary-item">
+            <ion-icon name="water-outline" color="primary"></ion-icon>
+            <div class="summary-text">
+              <h3>Water</h3>
+              <p>{{ weekWaterTotal }}ml consumed</p>
+              <p>{{ (weekWaterTotal / 7 / 2000 * 100).toFixed(0) }}% of daily goal on average</p>
+            </div>
+          </div>
+          
+          <div class="summary-item">
+            <ion-icon name="fitness-outline" color="success"></ion-icon>
+            <div class="summary-text">
+              <h3>Exercise</h3>
+              <p>{{ weekExerciseTotal }} minutes</p>
+              <p>{{ (weekExerciseTotal / 7).toFixed(0) }} minutes per day</p>
+            </div>
+          </div>
+          
+          <div class="summary-item">
+            <ion-icon name="moon-outline" color="tertiary"></ion-icon>
+            <div class="summary-text">
+              <h3>Sleep</h3>
+              <p>{{ averageSleepHours.toFixed(1) }} hours per night</p>
+              <p>Quality: {{ averageSleepQuality.toFixed(1) }}/5</p>
+            </div>
+          </div>
+          
+          <div class="summary-item">
+            <ion-icon name="happy-outline" color="warning"></ion-icon>
+            <div class="summary-text">
+              <h3>Mood</h3>
+              <p>Most frequent: {{ mostFrequentMood }}</p>
+            </div>
+          </div>
+        </ion-card-content>
+      </ion-card>
+    </div>
+    
+    <div *ngIf="selectedSegment === 'trends'">
+      <ion-card>
+        <ion-card-header>
+          <ion-card-title>Wellness Trends</ion-card-title>
+        </ion-card-header>
+        <ion-card-content>
+          <p>Coming soon: Charts and trends analysis!</p>
+          <p>Track more data to see patterns in your wellness habits.</p>
+        </ion-card-content>
+      </ion-card>
+    </div>
+    
+    <ion-card>
+      <ion-card-header>
+        <ion-card-title>Wellness Tips</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <ion-list lines="none">
+          <ion-item>
+            <ion-icon name="water-outline" slot="start" color="primary"></ion-icon>
+            <ion-label>
+              <h3>Stay Hydrated</h3>
+              <p>Aim for 2 liters of water daily to maintain energy and focus.</p>
+            </ion-label>
+          </ion-item>
+          
+          <ion-item>
+            <ion-icon name="fitness-outline" slot="start" color="success"></ion-icon>
+            <ion-label>
+              <h3>Move Regularly</h3>
+              <p>Even short 10-minute walks can boost your mood and energy.</p>
+            </ion-label>
+          </ion-item>
+          
+          <ion-item>
+            <ion-icon name="moon-outline" slot="start" color="tertiary"></ion-icon>
+            <ion-label>
+              <h3>Sleep Consistency</h3>
+              <p>Try to go to bed and wake up at the same time daily.</p>
+            </ion-label>
+          </ion-item>
+        </ion-list>
+      </ion-card-content>
+    </ion-card>
+  </div>
 </ion-content>
