@@ -1,41 +1,41 @@
 .dashboard-container {
-    padding: 16px;
+  padding: 16px;
+}
+
+.quote-card {
+  margin-bottom: 20px;
+  text-align: center;
+  background-color: #f8f8ff;
+}
+
+.quote-text {
+  font-style: italic;
+  font-size: 16px;
+  line-height: 1.4;
+}
+
+.quote-author {
+  font-weight: bold;
+  margin-top: 8px;
+}
+
+.tracker-card {
+  height: 100%;
+  text-align: center;
+  
+  ion-icon {
+    font-size: 36px;
+    margin-bottom: 10px;
   }
   
-  .quote-card {
-    margin-bottom: 20px;
-    text-align: center;
-    background-color: #f8f8ff;
-  }
-  
-  .quote-text {
-    font-style: italic;
+  h2 {
     font-size: 16px;
-    line-height: 1.4;
-  }
-  
-  .quote-author {
     font-weight: bold;
-    margin-top: 8px;
+    margin-bottom: 5px;
   }
   
-  .tracker-card {
-    height: 100%;
-    text-align: center;
-    
-    ion-icon {
-      font-size: 36px;
-      margin-bottom: 10px;
-    }
-    
-    h2 {
-      font-size: 16px;
-      font-weight: bold;
-      margin-bottom: 5px;
-    }
-    
-    p {
-      font-size: 12px;
-      margin: 0;
-    }
+  p {
+    font-size: 12px;
+    margin: 0;
   }
+}

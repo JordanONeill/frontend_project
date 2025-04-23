@@ -122,4 +122,33 @@ export class StorageService {
     await this._storage?.set('moodEntries', entries);
     this._moodEntries.next(entries);
   }
+  // services/storage.service.ts
+// Add these methods to the StorageService class
+
+// Add at the bottom of the class
+async getSettings() {
+  return await this._storage?.get('userSettings') || {
+    waterGoal: 2000,
+    exerciseGoal: 150,
+    sleepGoal: 8,
+    notificationsEnabled: false
+  };
+}
+
+async saveSettings(settings: any) {
+  await this._storage?.set('userSettings', settings);
+}
+
+async clearData() {
+  await this._storage?.remove('waterEntries');
+  await this._storage?.remove('exerciseEntries');
+  await this._storage?.remove('sleepEntries');
+  await this._storage?.remove('moodEntries');
+  
+  // Reload data
+  this.loadWaterEntries();
+  this.loadExerciseEntries();
+  this.loadSleepEntries();
+  this.loadMoodEntries();
+}
 }

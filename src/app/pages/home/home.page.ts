@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { IonicModule } from '@ionic/angular';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import { 
   StorageService, 
   WaterEntry, 
@@ -10,13 +10,24 @@ import {
   MoodEntry 
 } from '../../services/storage.service';
 import { QuotesService } from '../../services/quotes.service';
+import { 
+  IonHeader, IonToolbar, IonTitle, IonContent, IonCard, IonCardContent, 
+  IonGrid, IonRow, IonCol, IonIcon, IonButton, IonFooter, IonLabel, 
+  IonTabBar, IonTabButton, IonTabs, IonRouterOutlet
+} from '@ionic/angular/standalone';
 
 @Component({
   selector: 'app-home',
   templateUrl: 'home.page.html',
   styleUrls: ['home.page.scss'],
   standalone: true,
-  imports: [IonicModule, CommonModule]
+  imports: [
+    CommonModule, 
+    FormsModule, 
+    IonHeader, IonToolbar, IonTitle, IonContent, IonCard, IonCardContent,
+    IonGrid, IonRow, IonCol, IonIcon, IonButton, IonFooter, IonLabel,
+    IonTabBar, IonTabButton, IonTabs, IonRouterOutlet
+  ]
 })
 export class HomePage implements OnInit {
   todayWater: WaterEntry | null = null;
@@ -57,8 +68,12 @@ export class HomePage implements OnInit {
       this.todayMood = entries.find(entry => entry.date === today) || null;
     });
     
-    // Get a random motivational quote
-    this.loadRandomQuote();
+    // Use a static quote for now to get things working
+    this.quoteText = "Take care of your body. It's the only place you have to live.";
+    this.quoteAuthor = "Jim Rohn";
+    
+    // Later, we can try the API call again
+    // this.loadRandomQuote();
   }
   
   navigateTo(path: string) {

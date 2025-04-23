@@ -29,13 +29,7 @@ export class SettingsPage implements OnInit {
   }
 
   async loadSettings() {
-    // Get settings from storage
-    const settings = await this.storageService.storage?.get('userSettings') || {
-      waterGoal: 2000,
-      exerciseGoal: 150,
-      sleepGoal: 8,
-      notificationsEnabled: false
-    };
+    const settings = await this.storageService.getSettings();
     
     this.waterGoal = settings.waterGoal;
     this.exerciseGoal = settings.exerciseGoal;
@@ -51,7 +45,7 @@ export class SettingsPage implements OnInit {
       notificationsEnabled: this.notificationsEnabled
     };
     
-    await this.storageService.storage?.set('userSettings', settings);
+    await this.storageService.saveSettings(settings);
   }
 
   async toggleNotifications() {
@@ -101,16 +95,7 @@ export class SettingsPage implements OnInit {
           role: 'destructive',
           handler: async () => {
             // Clear all data except settings
-            await this.storageService.storage?.remove('waterEntries');
-            await this.storageService.storage?.remove('exerciseEntries');
-            await this.storageService.storage?.remove('sleepEntries');
-            await this.storageService.storage?.remove('moodEntries');
-            
-            // Reload data in services
-            this.storageService.loadWaterEntries();
-            this.storageService.loadExerciseEntries();
-            this.storageService.loadSleepEntries();
-            this.storageService.loadMoodEntries();
+            await this.storageService.clearData();
             
             const successAlert = await this.alertController.create({
               header: 'Data Cleared',

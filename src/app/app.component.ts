@@ -1,6 +1,5 @@
-// app.component.ts
 import { Component } from '@angular/core';
-import { IonicModule } from '@ionic/angular';
+import { IonApp, IonRouterOutlet } from '@ionic/angular/standalone';
 import { CommonModule } from '@angular/common';
 import { StorageService } from './services/storage.service';
 import { App } from '@capacitor/app';
@@ -10,7 +9,7 @@ import { App } from '@capacitor/app';
   templateUrl: 'app.component.html',
   styleUrls: ['app.component.scss'],
   standalone: true,
-  imports: [IonicModule, CommonModule],
+  imports: [IonApp, IonRouterOutlet, CommonModule],
 })
 export class AppComponent {
   constructor(private storageService: StorageService) {
