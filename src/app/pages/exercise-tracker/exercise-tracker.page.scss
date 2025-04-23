@@ -1,0 +1,23 @@
+// exercise-tracker.page.scss
+.tracker-container {
+    padding: 16px;
+  }
+  
+  .stats-content {
+    display: flex;
+    justify-content: space-around;
+    text-align: center;
+    
+    h3 {
+      margin: 0;
+      color: #666;
+      font-size: 14px;
+    }
+    
+    .stat-value {
+      font-size: 24px;
+      font-weight: bold;
+      color: #2dd36f;
+      margin: 5px 0 0;
+    }
+  }

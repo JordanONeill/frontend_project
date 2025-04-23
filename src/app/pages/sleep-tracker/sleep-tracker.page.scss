@@ -1,0 +1,41 @@
+// sleep-tracker.page.scss
+.tracker-container {
+    padding: 16px;
+  }
+  
+  .quality-rating {
+    display: flex;
+    justify-content: center;
+    margin: 10px 0;
+    
+    ion-icon {
+      font-size: 24px;
+      margin: 0 2px;
+    }
+  }
+  
+  .stats-card {
+    margin-top: 20px;
+  }
+  
+  .stats-grid {
+    display: flex;
+    justify-content: space-around;
+  }
+  
+  .stat-item {
+    text-align: center;
+    
+    h3 {
+      margin: 0;
+      color: #666;
+      font-size: 14px;
+    }
+    
+    .stat-value {
+      font-size: 24px;
+      font-weight: bold;
+      color: #7044ff;
+      margin: 5px 0 0;
+    }
+  }

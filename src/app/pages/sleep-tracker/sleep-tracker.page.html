@@ -1,13 +1,88 @@
+<!-- sleep-tracker.page.html -->
 <ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title>sleep-tracker</ion-title>
+  <ion-toolbar color="tertiary">
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="home"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Sleep Tracker</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">sleep-tracker</ion-title>
-    </ion-toolbar>
-  </ion-header>
+  <div class="tracker-container">
+    <ion-card>
+      <ion-card-header>
+        <ion-card-title>Log Sleep</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <ion-item>
+          <ion-label position="stacked">Hours of Sleep</ion-label>
+          <ion-range [(ngModel)]="sleepHours" min="0" max="12" step="0.5" pin="true">
+            <ion-label slot="start">0h</ion-label>
+            <ion-label slot="end">12h</ion-label>
+          </ion-range>
+          <ion-note>{{ sleepHours }} hours</ion-note>
+        </ion-item>
+        
+        <ion-item>
+          <ion-label position="stacked">Sleep Quality</ion-label>
+          <ion-range [(ngModel)]="sleepQuality" min="1" max="5" step="1" pin="true">
+            <ion-label slot="start">Poor</ion-label>
+            <ion-label slot="end">Great</ion-label>
+          </ion-range>
+          <div class="quality-rating">
+            <ion-icon *ngFor="let star of [1,2,3,4,5]" 
+                      [name]="star <= sleepQuality ? 'star' : 'star-outline'"
+                      color="warning">
+            </ion-icon>
+          </div>
+        </ion-item>
+        
+        <ion-button expand="block" (click)="addSleepEntry()" color="tertiary">Log Sleep</ion-button>
+      </ion-card-content>
+    </ion-card>
+    
+    <ion-card *ngIf="weekEntries.length > 0" class="stats-card">
+      <ion-card-header>
+        <ion-card-title>Sleep Insights</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <div class="stats-grid">
+          <div class="stat-item">
+            <h3>Average Hours</h3>
+            <p class="stat-value">{{ averageHours | number:'1.1-1' }}h</p>
+          </div>
+          <div class="stat-item">
+            <h3>Quality</h3>
+            <div class="quality-rating">
+              <ion-icon *ngFor="let star of [1,2,3,4,5]" 
+                      [name]="star <= averageQuality ? 'star' : 'star-outline'"
+                      color="warning">
+              </ion-icon>
+            </div>
+          </div>
+        </div>
+      </ion-card-content>
+    </ion-card>
+    
+    <ion-list>
+      <ion-list-header>
+        Recent Sleep Logs
+      </ion-list-header>
+      
+      <ion-item *ngFor="let entry of weekEntries">
+        <ion-icon name="moon-outline" slot="start" color="tertiary"></ion-icon>
+        <ion-label>
+          <h2>{{ formatDate(entry.date) }}</h2>
+          <p>{{ entry.hours }} hours • Quality: {{ entry.quality }}/5</p>
+        </ion-label>
+      </ion-item>
+      
+      <ion-item *ngIf="weekEntries.length === 0">
+        <ion-label>
+          <p>No sleep data recorded yet</p>
+        </ion-label>
+      </ion-item>
+    </ion-list>
+  </div>
 </ion-content>
