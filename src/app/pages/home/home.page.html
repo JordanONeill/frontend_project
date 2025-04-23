@@ -1,13 +1,96 @@
 <ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title>home</ion-title>
+  <ion-toolbar color="primary">
+    <ion-title>
+      Wellness Buddy
+    </ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">home</ion-title>
-    </ion-toolbar>
-  </ion-header>
+  <div class="dashboard-container">
+    <ion-card class="quote-card">
+      <ion-card-content>
+        <p class="quote-text">{{ quoteText }}</p>
+        <p class="quote-author">- {{ quoteAuthor }}</p>
+      </ion-card-content>
+    </ion-card>
+    
+    <ion-grid>
+      <ion-row>
+        <ion-col size="6">
+          <ion-card class="tracker-card" (click)="navigateTo('/water')">
+            <ion-card-content>
+              <ion-icon name="water-outline" color="primary"></ion-icon>
+              <h2>Water</h2>
+              <p *ngIf="todayWater">{{ todayWater.amount }}ml today</p>
+              <p *ngIf="!todayWater">Add today's intake</p>
+            </ion-card-content>
+          </ion-card>
+        </ion-col>
+        
+        <ion-col size="6">
+          <ion-card class="tracker-card" (click)="navigateTo('/exercise')">
+            <ion-card-content>
+              <ion-icon name="fitness-outline" color="success"></ion-icon>
+              <h2>Exercise</h2>
+              <p *ngIf="todayExercise">{{ todayExercise.duration }} mins today</p>
+              <p *ngIf="!todayExercise">Add today's workout</p>
+            </ion-card-content>
+          </ion-card>
+        </ion-col>
+      </ion-row>
+      
+      <ion-row>
+        <ion-col size="6">
+          <ion-card class="tracker-card" (click)="navigateTo('/sleep')">
+            <ion-card-content>
+              <ion-icon name="moon-outline" color="tertiary"></ion-icon>
+              <h2>Sleep</h2>
+              <p *ngIf="todaySleep">{{ todaySleep.hours }}hrs last night</p>
+              <p *ngIf="!todaySleep">Add sleep data</p>
+            </ion-card-content>
+          </ion-card>
+        </ion-col>
+        
+        <ion-col size="6">
+          <ion-card class="tracker-card" (click)="navigateTo('/mood')">
+            <ion-card-content>
+              <ion-icon name="happy-outline" color="warning"></ion-icon>
+              <h2>Mood</h2>
+              <p *ngIf="todayMood">{{ todayMood.mood }}</p>
+              <p *ngIf="!todayMood">Log today's mood</p>
+            </ion-card-content>
+          </ion-card>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+    
+    <ion-button expand="full" color="tertiary" (click)="navigateTo('/insights')">
+      <ion-icon name="bar-chart-outline" slot="start"></ion-icon>
+      View Insights
+    </ion-button>
+  </div>
 </ion-content>
+
+<ion-footer>
+  <ion-toolbar>
+    <ion-tabs>
+      <ion-tab-bar slot="bottom">
+        <ion-tab-button tab="home" selected>
+          <ion-icon name="home-outline"></ion-icon>
+          <ion-label>Home</ion-label>
+        </ion-tab-button>
+        
+        <ion-tab-button (click)="navigateTo('/insights')">
+          <ion-icon name="analytics-outline"></ion-icon>
+          <ion-label>Insights</ion-label>
+        </ion-tab-button>
+        
+        <ion-tab-button (click)="navigateTo('/settings')">
+          <ion-icon name="settings-outline"></ion-icon>
+          <ion-label>Settings</ion-label>
+        </ion-tab-button>
+      </ion-tab-bar>
+    </ion-tabs>
+  </ion-toolbar>
+</ion-footer>
