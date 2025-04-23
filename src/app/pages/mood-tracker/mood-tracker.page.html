@@ -1,4 +1,3 @@
-<!-- mood-tracker.page.html -->
 <ion-header [translucent]="true">
   <ion-toolbar color="warning">
     <ion-buttons slot="start">
@@ -10,11 +9,13 @@
 
 <ion-content [fullscreen]="true">
   <div class="tracker-container">
+    <!-- Mood selection card -->
     <ion-card>
       <ion-card-header>
         <ion-card-title>How are you feeling?</ion-card-title>
       </ion-card-header>
       <ion-card-content>
+        <!-- Visual mood selection grid -->
         <div class="mood-selection">
           <div class="mood-option" [class.selected]="selectedMood === 'happy'" (click)="selectMood('happy')">
             <ion-icon name="happy-outline"></ion-icon>
@@ -38,6 +39,7 @@
           </div>
         </div>
         
+        <!-- Optional notes textarea -->
         <ion-item>
           <ion-label position="stacked">Notes (optional)</ion-label>
           <ion-textarea [(ngModel)]="moodNotes" rows="3"></ion-textarea>
@@ -53,6 +55,7 @@
       </ion-card-content>
     </ion-card>
     
+    <!-- History of mood entries -->
     <ion-list>
       <ion-list-header>
         Recent Mood Entries
@@ -69,6 +72,9 @@
           <p>{{ formatDate(entry.date) }}</p>
           <p *ngIf="entry.notes">{{ entry.notes }}</p>
         </ion-label>
+        <ion-button slot="end" fill="clear" color="danger" (click)="deleteEntry(entry)">
+          <ion-icon name="trash-outline"></ion-icon>
+        </ion-button>
       </ion-item>
       
       <ion-item *ngIf="recentEntries.length === 0">

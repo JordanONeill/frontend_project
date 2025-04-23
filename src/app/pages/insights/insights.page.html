@@ -1,4 +1,4 @@
-<!-- insights.page.html -->
+<!-- src/app/pages/insights/insights.page.html -->
 <ion-header [translucent]="true">
   <ion-toolbar color="primary">
     <ion-buttons slot="start">
@@ -10,71 +10,60 @@
 
 <ion-content [fullscreen]="true">
   <div class="insights-container">
-    <ion-segment [(ngModel)]="selectedSegment" (ionChange)="segmentChanged($event)">
-      <ion-segment-button value="summary">
-        <ion-label>Summary</ion-label>
-      </ion-segment-button>
-      <ion-segment-button value="trends">
-        <ion-label>Trends</ion-label>
-      </ion-segment-button>
-    </ion-segment>
+    <!-- Weekly Summary -->
+    <ion-card>
+      <ion-card-header>
+        <ion-card-title>Weekly Summary</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <div class="summary-item">
+          <ion-icon name="water-outline" color="primary"></ion-icon>
+          <div class="summary-text">
+            <h3>Water</h3>
+            <p>{{ weekWaterTotal }}ml consumed</p>
+            <p>{{ (weekWaterTotal / 7 / waterGoal * 100).toFixed(0) }}% of daily goal on average</p>
+          </div>
+        </div>
+        
+        <div class="summary-item">
+          <ion-icon name="fitness-outline" color="success"></ion-icon>
+          <div class="summary-text">
+            <h3>Exercise</h3>
+            <p>{{ weekExerciseTotal }} minutes</p>
+            <p>{{ (weekExerciseTotal / exerciseGoal * 100).toFixed(0) }}% of weekly goal</p>
+          </div>
+        </div>
+        
+        <div class="summary-item">
+          <ion-icon name="moon-outline" color="tertiary"></ion-icon>
+          <div class="summary-text">
+            <h3>Sleep</h3>
+            <p>{{ averageSleepHours.toFixed(1) }} hours per night</p>
+            <p>Quality: {{ averageSleepQuality.toFixed(1) }}/5</p>
+          </div>
+        </div>
+        
+        <div class="summary-item">
+          <ion-icon name="happy-outline" color="warning"></ion-icon>
+          <div class="summary-text">
+            <h3>Mood</h3>
+            <p>Most frequent: {{ mostFrequentMood }}</p>
+          </div>
+        </div>
+      </ion-card-content>
+    </ion-card>
     
-    <div *ngIf="selectedSegment === 'summary'">
-      <ion-card>
-        <ion-card-header>
-          <ion-card-title>Weekly Summary</ion-card-title>
-        </ion-card-header>
-        <ion-card-content>
-          <div class="summary-item">
-            <ion-icon name="water-outline" color="primary"></ion-icon>
-            <div class="summary-text">
-              <h3>Water</h3>
-              <p>{{ weekWaterTotal }}ml consumed</p>
-              <p>{{ (weekWaterTotal / 7 / 2000 * 100).toFixed(0) }}% of daily goal on average</p>
-            </div>
-          </div>
-          
-          <div class="summary-item">
-            <ion-icon name="fitness-outline" color="success"></ion-icon>
-            <div class="summary-text">
-              <h3>Exercise</h3>
-              <p>{{ weekExerciseTotal }} minutes</p>
-              <p>{{ (weekExerciseTotal / 7).toFixed(0) }} minutes per day</p>
-            </div>
-          </div>
-          
-          <div class="summary-item">
-            <ion-icon name="moon-outline" color="tertiary"></ion-icon>
-            <div class="summary-text">
-              <h3>Sleep</h3>
-              <p>{{ averageSleepHours.toFixed(1) }} hours per night</p>
-              <p>Quality: {{ averageSleepQuality.toFixed(1) }}/5</p>
-            </div>
-          </div>
-          
-          <div class="summary-item">
-            <ion-icon name="happy-outline" color="warning"></ion-icon>
-            <div class="summary-text">
-              <h3>Mood</h3>
-              <p>Most frequent: {{ mostFrequentMood }}</p>
-            </div>
-          </div>
-        </ion-card-content>
-      </ion-card>
-    </div>
+    <!-- Personalized tip based on user data -->
+    <ion-card>
+      <ion-card-header>
+        <ion-card-title>Your Personalized Tip</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <p>{{ getWellnessTip() }}</p>
+      </ion-card-content>
+    </ion-card>
     
-    <div *ngIf="selectedSegment === 'trends'">
-      <ion-card>
-        <ion-card-header>
-          <ion-card-title>Wellness Trends</ion-card-title>
-        </ion-card-header>
-        <ion-card-content>
-          <p>Coming soon: Charts and trends analysis!</p>
-          <p>Track more data to see patterns in your wellness habits.</p>
-        </ion-card-content>
-      </ion-card>
-    </div>
-    
+    <!-- General wellness tips -->
     <ion-card>
       <ion-card-header>
         <ion-card-title>Wellness Tips</ion-card-title>

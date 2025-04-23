@@ -26,7 +26,7 @@ import {
     FormsModule, 
     IonHeader, IonToolbar, IonTitle, IonContent, IonCard, IonCardContent,
     IonGrid, IonRow, IonCol, IonIcon, IonButton, IonFooter, IonLabel,
-    IonTabBar, IonTabButton, IonTabs, IonRouterOutlet
+    IonTabBar, IonTabButton, IonTabs
   ]
 })
 export class HomePage implements OnInit {
@@ -34,6 +34,8 @@ export class HomePage implements OnInit {
   todayExercise: ExerciseEntry | null = null;
   todaySleep: SleepEntry | null = null;
   todayMood: MoodEntry | null = null;
+  allQuotes: any[] = [];
+  lastQuoteIndex: number = -1;
   
   quoteText: string = 'Loading your wellness inspiration...';
   quoteAuthor: string = '';
@@ -84,8 +86,16 @@ export class HomePage implements OnInit {
     this.quotesService.getRandomQuote().subscribe({
       next: (quotes) => {
         if (quotes && quotes.length > 0) {
-          // Get a random quote from the array
-          const randomIndex = Math.floor(Math.random() * quotes.length);
+          // Store all quotes in memory
+          this.allQuotes = quotes;
+          
+          // Get a random quote from the array - avoiding the last shown quote if possible
+          let randomIndex;
+          do {
+            randomIndex = Math.floor(Math.random() * quotes.length);
+          } while (quotes.length > 1 && this.lastQuoteIndex === randomIndex);
+          
+          this.lastQuoteIndex = randomIndex;
           const randomQuote = quotes[randomIndex];
           this.quoteText = randomQuote.text || 'Be the best version of yourself today!';
           this.quoteAuthor = randomQuote.author || 'Unknown';

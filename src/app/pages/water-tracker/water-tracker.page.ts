@@ -1,16 +1,27 @@
+// This page allows users to track their daily water intake
 import { Component, OnInit } from '@angular/core';
-import { IonicModule } from '@ionic/angular';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { StorageService, WaterEntry } from '../../services/storage.service';
 import { Haptics, ImpactStyle } from '@capacitor/haptics';
+import { AlertController } from '@ionic/angular/standalone';
+import {
+  IonHeader, IonToolbar, IonButtons, IonBackButton, IonTitle, IonContent,
+  IonCard, IonCardHeader, IonCardTitle, IonCardContent, IonItem, IonLabel,
+  IonInput, IonButton, IonList, IonListHeader, IonIcon, IonNote
+} from '@ionic/angular/standalone';
 
 @Component({
   selector: 'app-water-tracker',
   templateUrl: './water-tracker.page.html',
   styleUrls: ['./water-tracker.page.scss'],
   standalone: true,
-  imports: [IonicModule, CommonModule, FormsModule]
+  imports: [
+    CommonModule, FormsModule,
+    IonHeader, IonToolbar, IonButtons, IonBackButton, IonTitle, IonContent,
+    IonCard, IonCardHeader, IonCardTitle, IonCardContent, IonItem, IonLabel,
+    IonInput, IonButton, IonList, IonListHeader, IonIcon
+  ]
 })
 export class WaterTrackerPage implements OnInit {
   waterAmount: number = 250; // Default amount
@@ -19,10 +30,20 @@ export class WaterTrackerPage implements OnInit {
   waterPercentage: number = 0;
   todayEntries: WaterEntry[] = [];
 
-  constructor(private storageService: StorageService) { }
+  constructor(
+    private storageService: StorageService,
+    private alertController: AlertController
+  ) { }
 
   ngOnInit() {
+    this.loadSettings();
     this.loadTodayEntries();
+  }
+
+  // Load user's water goal from settings
+  async loadSettings() {
+    const settings = await this.storageService.getSettings();
+    this.dailyGoal = settings.waterGoal;
   }
 
   loadTodayEntries() {
@@ -36,7 +57,7 @@ export class WaterTrackerPage implements OnInit {
       // Calculate total water intake for today
       this.todayTotal = this.todayEntries.reduce((total, entry) => total + entry.amount, 0);
       
-      // Calculate percentage for visual representation
+      // Calculate percentage for visual representation (cap at 100%)
       this.waterPercentage = Math.min(100, (this.todayTotal / this.dailyGoal) * 100);
     });
   }
@@ -52,13 +73,14 @@ export class WaterTrackerPage implements OnInit {
     
     await this.storageService.addWaterEntry(entry);
     
-    // Provide haptic feedback
+    // Provide haptic feedback for tactile response
     await Haptics.impact({ style: ImpactStyle.Light });
     
     // Reset amount to default
     this.waterAmount = 250;
   }
 
+  // Quick add button functionality
   async quickAdd(amount: number) {
     // Add specified amount
     const entry: WaterEntry = {
@@ -72,12 +94,34 @@ export class WaterTrackerPage implements OnInit {
     await Haptics.impact({ style: ImpactStyle.Light });
   }
 
+  // Delete an entry with confirmation
   async deleteEntry(entry: WaterEntry) {
-    // Implementation will be added
-    // For now, this is a placeholder
-    console.log('Delete entry:', entry);
+    const alert = await this.alertController.create({
+      header: 'Delete Entry',
+      message: 'Are you sure you want to delete this entry?',
+      buttons: [
+        {
+          text: 'Cancel',
+          role: 'cancel'
+        },
+        {
+          text: 'Delete',
+          role: 'destructive'
+        }
+      ]
+    });
+    
+    await alert.present();
+    
+    const result = await alert.onDidDismiss();
+    if (result.role === 'destructive') {
+      // If they clicked delete button
+      await this.storageService.deleteWaterEntry(entry);
+      await Haptics.impact({ style: ImpactStyle.Medium });
+    }
   }
 
+  // Format ISO time string to readable format
   formatTime(dateString: string): string {
     const date = new Date(dateString);
     return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });

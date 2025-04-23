@@ -1,23 +1,38 @@
-// exercise-tracker.page.scss
 .tracker-container {
-    padding: 16px;
+  padding: 16px;
+}
+
+.stats-content {
+  display: flex;
+  justify-content: space-around;
+  text-align: center;
+  
+  h3 {
+    margin: 0;
+    color: #666;
+    font-size: 14px;
   }
   
-  .stats-content {
-    display: flex;
-    justify-content: space-around;
-    text-align: center;
-    
-    h3 {
-      margin: 0;
-      color: #666;
-      font-size: 14px;
-    }
-    
-    .stat-value {
-      font-size: 24px;
-      font-weight: bold;
-      color: #2dd36f;
-      margin: 5px 0 0;
-    }
+  .stat-value {
+    font-size: 24px;
+    font-weight: bold;
+    color: #2dd36f;
+    margin: 5px 0 0;
   }
+}
+
+/* Progress bar for weekly goal */
+.progress-bar {
+  height: 6px;
+  width: 100%;
+  background-color: #e6e6e6;
+  border-radius: 3px;
+  margin-top: 5px;
+}
+
+.progress-fill {
+  height: 100%;
+  background-color: #2dd36f;
+  border-radius: 3px;
+  transition: width 0.3s ease;
+}

@@ -1,4 +1,4 @@
-<!-- settings.page.html -->
+<!-- src/app/pages/settings/settings.page.html -->
 <ion-header [translucent]="true">
   <ion-toolbar color="medium">
     <ion-buttons slot="start">
@@ -11,6 +11,7 @@
 <ion-content [fullscreen]="true">
   <div class="settings-container">
     <ion-list>
+      <!-- Wellness goals section -->
       <ion-list-header>
         <ion-label>Wellness Goals</ion-label>
       </ion-list-header>
@@ -30,6 +31,7 @@
         <ion-input type="number" [(ngModel)]="sleepGoal" (ionChange)="saveSettings()"></ion-input>
       </ion-item>
       
+      <!-- App settings section -->
       <ion-list-header>
         <ion-label>App Settings</ion-label>
       </ion-list-header>
@@ -44,6 +46,7 @@
         <ion-label color="danger">Reset All Data</ion-label>
       </ion-item>
       
+      <!-- About section -->
       <ion-list-header>
         <ion-label>About</ion-label>
       </ion-list-header>

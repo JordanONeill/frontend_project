@@ -1,24 +1,37 @@
-// mood-tracker.page.ts
+// This page allows users to track their mood and emotional wellbeing
 import { Component, OnInit } from '@angular/core';
-import { IonicModule } from '@ionic/angular';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { StorageService, MoodEntry } from '../../services/storage.service';
 import { Haptics, ImpactStyle } from '@capacitor/haptics';
+import { AlertController } from '@ionic/angular/standalone';
+import {
+  IonHeader, IonToolbar, IonButtons, IonBackButton, IonTitle, IonContent,
+  IonCard, IonCardHeader, IonCardTitle, IonCardContent, IonItem, IonLabel,
+  IonButton, IonList, IonListHeader, IonIcon, IonTextarea
+} from '@ionic/angular/standalone';
 
 @Component({
   selector: 'app-mood-tracker',
   templateUrl: './mood-tracker.page.html',
   styleUrls: ['./mood-tracker.page.scss'],
   standalone: true,
-  imports: [IonicModule, CommonModule, FormsModule]
+  imports: [
+    CommonModule, FormsModule,
+    IonHeader, IonToolbar, IonButtons, IonBackButton, IonTitle, IonContent,
+    IonCard, IonCardHeader, IonCardTitle, IonCardContent, IonItem, IonLabel,
+    IonButton, IonList, IonListHeader, IonIcon, IonTextarea
+  ]
 })
 export class MoodTrackerPage implements OnInit {
-  selectedMood: string = '';
-  moodNotes: string = '';
+  selectedMood: string = '';  // Currently selected mood
+  moodNotes: string = '';     // Optional notes about mood
   recentEntries: MoodEntry[] = [];
 
-  constructor(private storageService: StorageService) { }
+  constructor(
+    private storageService: StorageService,
+    private alertController: AlertController
+  ) { }
 
   ngOnInit() {
     this.loadMoodData();
@@ -33,6 +46,7 @@ export class MoodTrackerPage implements OnInit {
     });
   }
 
+  // Handle mood selection with visual feedback
   selectMood(mood: string) {
     this.selectedMood = mood;
     // Provide haptic feedback
@@ -59,6 +73,33 @@ export class MoodTrackerPage implements OnInit {
     this.moodNotes = '';
   }
 
+  // Delete a mood entry with confirmation
+  async deleteEntry(entry: MoodEntry) {
+    const alert = await this.alertController.create({
+      header: 'Delete Entry',
+      message: 'Are you sure you want to delete this mood entry?',
+      buttons: [
+        {
+          text: 'Cancel',
+          role: 'cancel'
+        },
+        {
+          text: 'Delete',
+          role: 'destructive'
+        }
+      ]
+    });
+    
+    await alert.present();
+    
+    const result = await alert.onDidDismiss();
+    if (result.role === 'destructive') {
+      await this.storageService.deleteMoodEntry(entry);
+      await Haptics.impact({ style: ImpactStyle.Medium });
+    }
+  }
+
+  // Get the appropriate icon for each mood
   getMoodIcon(mood: string): string {
     const icons: {[key: string]: string} = {
       'happy': 'happy-outline',
@@ -71,10 +112,12 @@ export class MoodTrackerPage implements OnInit {
     return icons[mood] || 'help-outline';
   }
 
+  // Format mood text for display (capitalize)
   formatMood(mood: string): string {
     return mood.charAt(0).toUpperCase() + mood.slice(1);
   }
 
+  // Format date string for readable display
   formatDate(dateString: string): string {
     const date = new Date(dateString);
     return date.toLocaleDateString([], { weekday: 'short', month: 'short', day: 'numeric' }) + 

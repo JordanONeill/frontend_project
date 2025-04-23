@@ -9,6 +9,7 @@
 
 <ion-content [fullscreen]="true">
   <div class="tracker-container">
+    <!-- Exercise entry form -->
     <ion-card>
       <ion-card-header>
         <ion-card-title>Add Exercise</ion-card-title>
@@ -36,6 +37,7 @@
       </ion-card-content>
     </ion-card>
     
+    <!-- Exercise stats display -->
     <div class="stats-display">
       <ion-card>
         <ion-card-content class="stats-content">
@@ -44,13 +46,17 @@
             <p class="stat-value">{{ todayMinutes }} min</p>
           </div>
           <div>
-            <h3>Week</h3>
-            <p class="stat-value">{{ weekMinutes }} min</p>
+            <h3>This Week</h3>
+            <p class="stat-value">{{ weekMinutes }} / {{ exerciseGoal }} min</p>
+            <div class="progress-bar">
+              <div class="progress-fill" [style.width.%]="getGoalPercentage()"></div>
+            </div>
           </div>
         </ion-card-content>
       </ion-card>
     </div>
     
+    <!-- List of today's activities -->
     <ion-list>
       <ion-list-header>
         Today's Activities

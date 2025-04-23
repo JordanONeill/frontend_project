@@ -1,29 +1,50 @@
-// sleep-tracker.page.ts
+// This page allows users to track their sleep duration and quality
 import { Component, OnInit } from '@angular/core';
-import { IonicModule } from '@ionic/angular';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { StorageService, SleepEntry } from '../../services/storage.service';
 import { Haptics, ImpactStyle } from '@capacitor/haptics';
+import { AlertController } from '@ionic/angular/standalone';
+import {
+  IonHeader, IonToolbar, IonButtons, IonBackButton, IonTitle, IonContent,
+  IonCard, IonCardHeader, IonCardTitle, IonCardContent, IonItem, IonLabel,
+  IonButton, IonList, IonListHeader, IonIcon, IonRange, IonNote
+} from '@ionic/angular/standalone';
 
 @Component({
   selector: 'app-sleep-tracker',
   templateUrl: './sleep-tracker.page.html',
   styleUrls: ['./sleep-tracker.page.scss'],
   standalone: true,
-  imports: [IonicModule, CommonModule, FormsModule]
+  imports: [
+    CommonModule, FormsModule,
+    IonHeader, IonToolbar, IonButtons, IonBackButton, IonTitle, IonContent,
+    IonCard, IonCardHeader, IonCardTitle, IonCardContent, IonItem, IonLabel,
+    IonButton, IonList, IonListHeader, IonIcon, IonRange, IonNote
+  ]
 })
 export class SleepTrackerPage implements OnInit {
-  sleepHours: number = 7;
-  sleepQuality: number = 3;
+  sleepHours: number = 7;       // Default hours of sleep
+  sleepQuality: number = 3;     // Default quality (1-5 scale)
   weekEntries: SleepEntry[] = [];
   averageHours: number = 0;
   averageQuality: number = 0;
+  sleepGoal: number = 8;        // Default sleep goal in hours
 
-  constructor(private storageService: StorageService) { }
+  constructor(
+    private storageService: StorageService,
+    private alertController: AlertController
+  ) { }
 
   ngOnInit() {
+    this.loadSettings();
     this.loadSleepData();
+  }
+
+  // Load user's sleep goal from settings
+  async loadSettings() {
+    const settings = await this.storageService.getSettings();
+    this.sleepGoal = settings.sleepGoal;
   }
 
   loadSleepData() {
@@ -66,8 +87,57 @@ export class SleepTrackerPage implements OnInit {
     await Haptics.impact({ style: ImpactStyle.Light });
   }
 
+  // Delete a sleep entry with confirmation
+  async deleteEntry(entry: SleepEntry) {
+    const alert = await this.alertController.create({
+      header: 'Delete Entry',
+      message: 'Are you sure you want to delete this sleep record?',
+      buttons: [
+        {
+          text: 'Cancel',
+          role: 'cancel'
+        },
+        {
+          text: 'Delete',
+          role: 'destructive'
+        }
+      ]
+    });
+    
+    await alert.present();
+    
+    const result = await alert.onDidDismiss();
+    if (result.role === 'destructive') {
+      await this.storageService.deleteSleepEntry(entry);
+      await Haptics.impact({ style: ImpactStyle.Medium });
+    }
+  }
+
+  // Format date for display
   formatDate(dateString: string): string {
     const date = new Date(dateString);
     return date.toLocaleDateString([], { weekday: 'short', month: 'short', day: 'numeric' });
+  }
+  
+  // Calculate sleep goal progress
+  getSleepGoalStatus(): string {
+    if (this.averageHours >= this.sleepGoal) {
+      return "You're meeting your sleep goal. Great job!";
+    } else if (this.averageHours >= this.sleepGoal - 1) {
+      return "You're close to your sleep goal.";
+    } else {
+      return "You're below your sleep goal.";
+    }
+  }
+  
+  // Get color for sleep goal status
+  getSleepGoalStatusColor(): string {
+    if (this.averageHours >= this.sleepGoal) {
+      return "success";
+    } else if (this.averageHours >= this.sleepGoal - 1) {
+      return "warning";
+    } else {
+      return "danger";
+    }
   }
 }

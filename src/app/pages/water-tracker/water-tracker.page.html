@@ -9,6 +9,7 @@
 
 <ion-content [fullscreen]="true">
   <div class="tracker-container">
+    <!-- Visual water level indicator -->
     <div class="water-display">
       <div class="water-glass">
         <div class="water-level" [style.height.%]="waterPercentage"></div>
@@ -19,6 +20,7 @@
       </div>
     </div>
     
+    <!-- Input form to add water intake -->
     <ion-card>
       <ion-card-header>
         <ion-card-title>Add Water</ion-card-title>
@@ -29,6 +31,7 @@
           <ion-input type="number" [(ngModel)]="waterAmount" min="0" max="1000"></ion-input>
         </ion-item>
         
+        <!-- Quick add buttons for common amounts -->
         <div class="quick-add">
           <ion-button size="small" (click)="quickAdd(100)">+100ml</ion-button>
           <ion-button size="small" (click)="quickAdd(200)">+200ml</ion-button>
@@ -39,6 +42,7 @@
       </ion-card-content>
     </ion-card>
     
+    <!-- List of today's entries -->
     <ion-list>
       <ion-list-header>
         Today's Entries
