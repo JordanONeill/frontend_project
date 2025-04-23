@@ -1,0 +1,7 @@
+{
+  "name": "wellness-buddy",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular-standalone"
+}
