@@ -1,13 +1,60 @@
+<!-- settings.page.html -->
 <ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title>settings</ion-title>
+  <ion-toolbar color="medium">
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="home"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Settings</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">settings</ion-title>
-    </ion-toolbar>
-  </ion-header>
+  <div class="settings-container">
+    <ion-list>
+      <ion-list-header>
+        <ion-label>Wellness Goals</ion-label>
+      </ion-list-header>
+      
+      <ion-item>
+        <ion-label>Daily Water Goal (ml)</ion-label>
+        <ion-input type="number" [(ngModel)]="waterGoal" (ionChange)="saveSettings()"></ion-input>
+      </ion-item>
+      
+      <ion-item>
+        <ion-label>Weekly Exercise (minutes)</ion-label>
+        <ion-input type="number" [(ngModel)]="exerciseGoal" (ionChange)="saveSettings()"></ion-input>
+      </ion-item>
+      
+      <ion-item>
+        <ion-label>Daily Sleep Goal (hours)</ion-label>
+        <ion-input type="number" [(ngModel)]="sleepGoal" (ionChange)="saveSettings()"></ion-input>
+      </ion-item>
+      
+      <ion-list-header>
+        <ion-label>App Settings</ion-label>
+      </ion-list-header>
+      
+      <ion-item>
+        <ion-label>Push Notifications</ion-label>
+        <ion-toggle [(ngModel)]="notificationsEnabled" (ionChange)="toggleNotifications()"></ion-toggle>
+      </ion-item>
+      
+      <ion-item button (click)="clearAllData()">
+        <ion-icon name="trash-outline" slot="start" color="danger"></ion-icon>
+        <ion-label color="danger">Reset All Data</ion-label>
+      </ion-item>
+      
+      <ion-list-header>
+        <ion-label>About</ion-label>
+      </ion-list-header>
+      
+      <ion-item>
+        <ion-label>
+          <h2>Wellness Buddy</h2>
+          <p>Version 1.0.0</p>
+          <p>© 2025 Jordan O'Neill</p>
+        </ion-label>
+      </ion-item>
+    </ion-list>
+  </div>
 </ion-content>
